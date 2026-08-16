@@ -141,7 +141,7 @@ const RegisterForm = ({ title, subtitle, buttonText, darkMode, onBackToLogin }) 
                 countdown > 0 ? "bg-gray-500 cursor-not-allowed" : "bg-yellow-500 hover:bg-yellow-600"
               }`}
             >
-              {countdown > 0 ? `Tunggu ${countdown}s` : "Kirim Kode"}
+              {countdown > 0 ? `Tunggu ${countdown}s` : "Generate OTP"}
             </button>
           </div>
         </div>
