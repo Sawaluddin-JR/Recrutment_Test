@@ -23,6 +23,7 @@ const QuestionForm = () => {
   const fetchCompany = async () => {
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id");
+    
     setUserId(id);
 
     try {
@@ -31,18 +32,53 @@ const QuestionForm = () => {
       });
 
       const company = res.data;
+
+      console.log("Company user:", company);
+
+      // if (company && company.id) {
+      //   setUserCompany(company);
+      //   setForm((prev) => ({ ...prev, companyId: company.id }));
+      //   setForm((prev) => ({ ...prev, companyCode: company.code }));
+      // } else {
+      //   setUserCompany(null);
+      //   setForm((prev) => ({ ...prev, companyId: null }));
+      // }
+
       if (company && company.id) {
         setUserCompany(company);
-        setForm((prev) => ({ ...prev, companyId: company.id }));
-        setForm((prev) => ({ ...prev, companyCode: company.code }));
+
+        setForm((prev) => ({
+          ...prev,
+          companyId: company.id,
+          companyCode: company.code,
+          questionCode: "UMUM",
+        }));
+
+        // 🔥 INI YANG SEBELUMNYA KURANG
+        await fetchQuestionCodes(company.code);
       } else {
         setUserCompany(null);
-        setForm((prev) => ({ ...prev, companyId: null }));
+
+        setForm((prev) => ({
+          ...prev,
+          companyId: null,
+          companyCode: "UMUM",
+          questionCode: "UMUM",
+        }));
+
+        await fetchQuestionCodes("UMUM");
       }
-    } catch (err) {
+      } catch (err) {
       console.error("❌ Gagal ambil data perusahaan user:", err);
+
       setUserCompany(null);
-      setForm((prev) => ({ ...prev, companyId: null }));
+
+      setForm((prev) => ({
+        ...prev,
+        companyId: null,
+        companyCode: "UMUM",
+        questionCode: "UMUM",
+      }));
     }
   };
 
