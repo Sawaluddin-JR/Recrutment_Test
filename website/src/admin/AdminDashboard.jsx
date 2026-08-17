@@ -1,21 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  Users,
+  BookOpen,
+  FileCheck2,
+} from "lucide-react";
 
 const AdminDashboard = () => {
+  const [totalCandidates, setTotalCandidates] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [totalActiveTests, setTotalActiveTests] = useState(0);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const [candidateResponse, questionResponse] = await Promise.all([
+          axios.get("http://localhost:8080/api/candidates", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+
+          axios.get("http://localhost:8080/api/questions", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ]);
+
+        const candidates = candidateResponse.data || [];
+        const questions = questionResponse.data || [];
+
+        setTotalCandidates(candidates.length);
+        setTotalQuestions(questions.length);
+
+        // Sementara karena endpoint tes aktif belum ada
+        setTotalActiveTests(0);
+
+      } catch (error) {
+        console.error("❌ Gagal mengambil data dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <div className="text-white">
       <h2 className="text-2xl font-bold mb-4">📊 Dashboard Admin</h2>
       <p className="text-gray-400 mb-6">
-        Selamat datang kembali di sistem rekrutmen. Berikut ringkasan hari ini:
+        Selamat datang kembali di sistem seleksi karyawan. Berikut ringkasan hari ini:
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gray-800 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-2">👥 Total Kandidat</h3>
-          <p className="text-3xl font-bold text-blue-400">128</p>
+          <p className="text-3xl font-bold text-blue-400">{loading ? "..." : totalCandidates}</p>
         </div>
         <div className="bg-gray-800 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-2">📚 Total Soal</h3>
-          <p className="text-3xl font-bold text-green-400">245</p>
+          <p className="text-3xl font-bold text-green-400">{loading ? "..." : totalQuestions}</p>
         </div>
         <div className="bg-gray-800 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-2">📝 Tes Aktif</h3>

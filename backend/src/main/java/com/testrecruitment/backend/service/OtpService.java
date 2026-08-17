@@ -1,14 +1,13 @@
 package com.testrecruitment.backend.service;
 
-import com.testrecruitment.backend.model.VerificationCode;
-import com.testrecruitment.backend.repository.VerificationCodeRepository;
+import java.time.LocalDateTime;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Random;
+import com.testrecruitment.backend.model.VerificationCode;
+import com.testrecruitment.backend.repository.VerificationCodeRepository;
 
 @Service
 public class OtpService {
@@ -35,15 +34,25 @@ public class OtpService {
 
         // Kirim email
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("achmadfauzan913@gmail.com");
         message.setTo(email);
         message.setSubject("Kode Verifikasi OTP");
         message.setText("Kode OTP Anda adalah: " + code + "\nBerlaku selama 5 menit.");
-
+        System.out.println("Before sending to : " + email + ": " + code);
         try {
+            System.out.println("=== START SEND EMAIL ===");
+            System.out.println("To       : " + email);
+            System.out.println("SMTP Host: " + mailSender);
+
             mailSender.send(message);
-            System.out.println("OTP terkirim ke " + email + ": " + code);
+
+            System.out.println("=== EMAIL SENT SUCCESSFULLY ===");
+
         } catch (Exception e) {
-            System.err.println("Gagal kirim OTP ke email: " + e.getMessage());
+            System.err.println("=== EMAIL SEND FAILED ===");
+            System.err.println("Exception : " + e.getClass().getName());
+            System.err.println("Message   : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

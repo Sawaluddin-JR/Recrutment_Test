@@ -8,6 +8,7 @@ const RegisterForm = ({ title, subtitle, buttonText, darkMode, onBackToLogin }) 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [countdown, setCountdown] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -91,23 +92,41 @@ const RegisterForm = ({ title, subtitle, buttonText, darkMode, onBackToLogin }) 
         </div>
         <div>
           <label className={`block ${label} text-sm mb-1`}>Password</label>
-          <input
-            type="password"
-            className={`w-full px-4 py-2 rounded-lg ${inputBg} border focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`w-full px-4 py-2 rounded-lg ${inputBg} border focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-blue-400 hover:text-blue-300"
+              >
+                {showPassword ? "Sembunyikan" : "Lihat"}
+            </button>
+          </div>
         </div>
         <div>
           <label className={`block ${label} text-sm mb-1`}>Confirm Password</label>
-          <input
-            type="password"
-            className={`w-full px-4 py-2 rounded-lg ${inputBg} border focus:outline-none focus:ring-2 focus:ring-blue-500`}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`w-full px-4 py-2 rounded-lg ${inputBg} border focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-blue-400 hover:text-blue-300"
+              >
+                {showPassword ? "Sembunyikan" : "Lihat"}
+            </button>
+          </div>
         </div>
         <div>
           <label className={`block ${label} text-sm mb-1`}>Role</label>
@@ -157,7 +176,7 @@ const RegisterForm = ({ title, subtitle, buttonText, darkMode, onBackToLogin }) 
             onClick={onBackToLogin || (() => window.location.href = "/login")}
             className="text-sm text-blue-500 hover:underline"
           >
-            Sudah punya akun? Masuk di sini
+            Already have an account? Log in here.
           </button>
         </div>
       </form>

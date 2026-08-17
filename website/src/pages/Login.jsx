@@ -7,8 +7,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       <LoginForm
-        title="Welcome Back"
-        subtitle="Login to your account"
+        title="Login"
         buttonText="Login"
         onRegisterClick={() => navigate('/register')}
       />

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const LoginForm = ({ title, subtitle, buttonText, onRegisterClick }) => {
+const LoginForm = ({ title, buttonText, onRegisterClick }) => {
   const [identifier, setIdentifier] = useState("") // email atau username
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     try {
       const response = await axios.post("http://localhost:8080/api/auth/login", {
         identifier, // kirim sebagai "identifier"
@@ -19,6 +21,7 @@ const LoginForm = ({ title, subtitle, buttonText, onRegisterClick }) => {
       localStorage.setItem("email", response.data.email);
       localStorage.setItem("role", response.data.role); 
       localStorage.setItem("identifier", identifier);
+
       console.log("responsenih"+response.data)
 
       // Arahkan langsung berdasarkan role
@@ -40,10 +43,9 @@ const LoginForm = ({ title, subtitle, buttonText, onRegisterClick }) => {
   return (
     <div className="bg-gray-900 p-8 rounded-2xl shadow-2xl w-full max-w-md">
       <h2 className="text-3xl font-bold text-white text-center mb-2">{title}</h2>
-      <p className="text-gray-400 text-center mb-6">{subtitle}</p>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-gray-400 text-sm mb-1">Email / Username</label>
+          <label className="block text-gray-400 text-sm mb-1">Username</label>
           <input
             type="text" // ubah jadi text, agar tidak wajib format email
             className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -53,14 +55,25 @@ const LoginForm = ({ title, subtitle, buttonText, onRegisterClick }) => {
           />
         </div>
         <div>
-          <label className="block text-gray-400 text-sm mb-1">Password</label>
-          <input
-            type="password"
-            className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <label className="block text-gray-400 text-sm mb-1">
+            Password
+          </label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-blue-400 hover:text-blue-300"
+            >
+              {showPassword ? "Sembunyikan" : "Lihat"}
+            </button>
+          </div>
         </div>
         <button
           type="submit"
@@ -76,7 +89,7 @@ const LoginForm = ({ title, subtitle, buttonText, onRegisterClick }) => {
           className="text-blue-500 hover:underline font-semibold"
           type="button"
         >
-          Register here
+          Register Here
         </button>
       </p>
     </div>

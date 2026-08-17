@@ -51,7 +51,7 @@
               onClick={handleLogout}
               className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
             >
-              🚪 Logout
+              Logout
             </button>
           </div>
         </header>
@@ -118,7 +118,7 @@
           <main className="flex-1 p-6 overflow-y-auto">
             <h2 className="text-2xl font-bold mb-4">Selamat Datang, Admin 👋</h2>
             <p className="text-gray-400 mb-6">
-              Gunakan menu untuk mengelola sistem rekrutmen.
+              Gunakan menu untuk mengelola sistem seleksi karyawan.
             </p>
             <Outlet />
           </main>

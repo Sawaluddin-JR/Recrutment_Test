@@ -7,8 +7,7 @@ export default function Register() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       <RegisterForm
-        title="Create an Account"
-        subtitle="Register to get started"
+        title="Register"
         buttonText="Register"
         darkMode={true}
         onBackToLogin={() => navigate('/login')}

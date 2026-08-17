@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
+import {
+  Menu,
+  X,
+  Home,
+  ClipboardList,
+  History,
+  User,
+  LogOut
+} from "lucide-react";
+
 const HomeUser = () => {
   const [showSidebar, setShowSidebar] = useState(true);
 
@@ -44,7 +54,7 @@ const HomeUser = () => {
             onClick={handleLogout}
             className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
           >
-            🚪 Logout
+            Logout
           </button>
         </div>
       </header>

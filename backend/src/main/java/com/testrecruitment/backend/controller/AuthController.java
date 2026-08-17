@@ -1,5 +1,17 @@
 package com.testrecruitment.backend.controller;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.testrecruitment.backend.dto.LoginRequestDTO;
 import com.testrecruitment.backend.dto.LoginResponseDTO;
 import com.testrecruitment.backend.dto.RegisterRequestDTO;
@@ -16,14 +28,6 @@ import com.testrecruitment.backend.service.OtpService;
 import com.testrecruitment.backend.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
