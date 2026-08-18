@@ -53,11 +53,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="text-white">
-      <h2 className="text-2xl font-bold mb-4">📊 Dashboard Admin</h2>
-      <p className="text-gray-400 mb-6">
-        Selamat datang kembali di sistem seleksi karyawan. Berikut ringkasan hari ini:
-      </p>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gray-800 p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold mb-2">👥 Total Kandidat</h3>

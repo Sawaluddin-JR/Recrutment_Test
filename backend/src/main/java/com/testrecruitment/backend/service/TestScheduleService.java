@@ -75,14 +75,13 @@ public class TestScheduleService {
         existing.setStartTime(dto.getStartTime());
         existing.setEndTime(dto.getEndTime());
 
-        // Update relasi
-        Company company = companyRepository.findById(dto.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company tidak ditemukan"));
-        existing.setCompany(company);
+        // Company company = companyRepository.findById(dto.getCompanyId())
+        //         .orElseThrow(() -> new RuntimeException("Company tidak ditemukan"));
+        // existing.setCompany(company);
 
-        QuestionCode questionCode = questionCodeRepository.findByCode(dto.getQuestionCode())
-                .orElseThrow(() -> new RuntimeException("Question code tidak ditemukan"));
-        existing.setQuestionCode(questionCode);
+        // QuestionCode questionCode = questionCodeRepository.findByCode(dto.getQuestionCode())
+        //         .orElseThrow(() -> new RuntimeException("Question code tidak ditemukan"));
+        // existing.setQuestionCode(questionCode);
 
         return TestScheduleMapper.toResponseDto(testScheduleRepository.save(existing));
     }

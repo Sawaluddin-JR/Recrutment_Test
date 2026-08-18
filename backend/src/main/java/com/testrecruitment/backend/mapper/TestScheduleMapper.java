@@ -6,25 +6,21 @@ import com.testrecruitment.backend.model.TestSchedule;
 
 public class TestScheduleMapper {
 
-    // Mapping dari RequestDto ke Entity
-    // public static TestSchedule toEntity(TestScheduleRequestDto dto, Company
-    // company, QuestionCode questionCode) {
     public static TestSchedule toEntity(TestScheduleRequestDto dto) {
         TestSchedule entity = new TestSchedule();
+
+        entity.setTitle(dto.getTitle());
         entity.setCodeTest(dto.getCodeTest());
         entity.setStartTime(dto.getStartTime());
         entity.setEndTime(dto.getEndTime());
-        entity.setActive(true); // default aktif saat dibuat, bisa sesuaikan
+        entity.setActive(true);
+
         // entity.setQuestionCode(dto.getQuestionCode());
         // entity.setCompanyId(dto.getCompanyId());
 
-        // title bisa di-set secara terpisah jika ada logika khusus, misal sama dengan
-        // codeTest atau diisi lain
-        entity.setTitle(dto.getCodeTest()); // contoh default set title sama codeTest
         return entity;
     }
 
-    // Mapping dari Entity ke ResponseDto
     public static TestScheduleResponseDto toResponseDto(TestSchedule entity) {
         TestScheduleResponseDto dto = new TestScheduleResponseDto();
         dto.setId(entity.getId());

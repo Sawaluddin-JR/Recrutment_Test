@@ -22,7 +22,7 @@ const AdminProfile = () => {
   return (
     <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-xl mx-auto">
       <h2 className="text-2xl font-bold mb-4 border-b border-gray-700 pb-2">
-        👤 Profil Kandidat
+        👤 Profil Admin
       </h2>
 
       <div className="space-y-4">
@@ -62,9 +62,9 @@ const AdminProfile = () => {
         </div>
 
         <div>
-          <label className="text-gray-400">Status:</label>
+          <label className="text-gray-400">Status : </label>
           <span
-            className={`inline-block px-2 py-1 text-sm rounded ${
+            className={`inline-block px-4 py-1 text-sm rounded ${
               candidate.status === "aktif"
                 ? "bg-green-600"
                 : "bg-gray-600"

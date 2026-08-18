@@ -116,10 +116,6 @@
 
           {/* Main content */}
           <main className="flex-1 p-6 overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">Selamat Datang, Admin 👋</h2>
-            <p className="text-gray-400 mb-6">
-              Gunakan menu untuk mengelola sistem seleksi karyawan.
-            </p>
             <Outlet />
           </main>
         </div>
