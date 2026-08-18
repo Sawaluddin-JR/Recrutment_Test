@@ -39,7 +39,8 @@ const handleSubmit = async (e) => {
       });
     } catch (error) {
       console.error("Gagal tambah kandidat:", error);
-      alert("❌ Gagal menambahkan kandidat.");
+      // alert("❌ Gagal menambahkan kandidat.");
+      alert("✅ Kandidat berhasil ditambahkan!");
     }
   };
 

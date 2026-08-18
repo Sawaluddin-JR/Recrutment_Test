@@ -71,9 +71,9 @@
                   <Link to="/home/admin/candidates" className="block hover:bg-gray-700 p-2 rounded">
                     📋 Daftar Kandidat
                   </Link>
-                  {/* <Link to="/home/admin/candidates/add" className="block hover:bg-gray-700 p-2 rounded">
+                  <Link to="/home/admin/candidates/add" className="block hover:bg-gray-700 p-2 rounded">
                     ➕ Tambah Kandidat
-                  </Link> */}
+                  </Link>
                 </div>
 
                 <div>
