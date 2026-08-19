@@ -73,7 +73,6 @@ const AdminProfile = () => {
           </span>
         </div>
 
-        {/* Tombol tindakan */}
         <div className="mt-6 flex gap-4">
           <Link
             to="/home/admin/profile/edit"

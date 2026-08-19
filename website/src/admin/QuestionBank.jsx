@@ -4,11 +4,14 @@ import axios from "axios";
 const QuestionBank = () => {
   const [questions, setQuestions] = useState([]);
   const [editingQuestion, setEditingQuestion] = useState(null);
+
   const [editedQuestion, setEditedQuestion] = useState({
     content: "",
     type: "MULTIPLE_CHOICE",
-    questionCode: "UMUM",
-    options: [{ text: "", correct: false }, { text: "", correct: false }],
+    options: [
+      { text: "", correct: false },
+      { text: "", correct: false },
+    ],
     correctAnswer: "",
   });
 
@@ -26,19 +29,36 @@ const QuestionBank = () => {
     }
   };
 
-  // Mulai edit soal
+  // const startEdit = (q) => {
+  //   setEditingQuestion(q.id);
+  //   setEditedQuestion({
+  //     content: q.content || "",
+  //     type: q.type || "MULTIPLE_CHOICE",
+  //     questionCode: q.questionCode || "UMUM",
+  //     options: q.options?.length ? q.options : [{ text: "", correct: false }],
+  //     correctAnswer: q.correctAnswer || "",
+  //   });
+  // };
+
   const startEdit = (q) => {
     setEditingQuestion(q.id);
+
     setEditedQuestion({
       content: q.content || "",
       type: q.type || "MULTIPLE_CHOICE",
-      questionCode: q.questionCode || "UMUM",
-      options: q.options?.length ? q.options : [{ text: "", correct: false }],
+      options: q.options?.length
+        ? q.options.map((opt) => ({
+          text: opt.text || "",
+          correct: !!opt.correct,
+        }))
+        : [
+          { text: "", correct: false },
+          { text: "", correct: false },
+        ],
       correctAnswer: q.correctAnswer || "",
     });
   };
 
-  // Handle perubahan field
   const handleChange = (field, value) => {
     setEditedQuestion((prev) => ({ ...prev, [field]: value }));
   };
@@ -60,8 +80,23 @@ const QuestionBank = () => {
   // Simpan edit pertanyaan
   const handleSaveEdit = async (id) => {
     const token = localStorage.getItem("token");
-    const payload = { ...editedQuestion }; // semua field kecuali id
+    // const payload = { ...editedQuestion };
+
+    const payload = {
+      content: editedQuestion.content,
+      type: editedQuestion.type,
+      correctAnswer:
+        editedQuestion.type === "ESSAY"
+          ? editedQuestion.correctAnswer
+          : null,
+      options:
+        editedQuestion.type === "MULTIPLE_CHOICE"
+          ? editedQuestion.options
+          : [],
+    };
+
     console.log("paylod : ", payload);
+
     try {
       await axios.put(`http://localhost:8080/api/questions/${id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },

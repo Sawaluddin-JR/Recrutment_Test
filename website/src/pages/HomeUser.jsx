@@ -84,12 +84,11 @@ const HomeUser = () => {
           </aside>
         )}
 
-        {/* Main content */}
         <main className="flex-1 p-6 overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4">Selamat Datang, {userName} 👋</h2>
+          {/* <h2 className="text-2xl font-bold mb-4">Selamat Datang, {userName} 👋</h2>
           <p className="text-gray-400 mb-6">
             Silakan gunakan menu di sebelah kiri untuk mengakses tes, melihat riwayat, dan mengelola profil Anda.
-          </p>
+          </p> */}
           <Outlet />
         </main>
       </div>

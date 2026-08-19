@@ -83,46 +83,70 @@ public class QuestionService {
                 .collect(Collectors.toList());
     }
 
+//     public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto dto) {
+//         Question existing = questionRepository.findById(id)
+//                 .orElseThrow(() -> new RuntimeException("Question not found with id " + id));
+
+//         Company company = companyRepository.findById(dto.getCompanyId())
+//                 .orElseThrow(() -> new RuntimeException("Company not found with id " + dto.getCompanyId()));
+
+//         Users createdBy = userRepository.findById(dto.getCreatedById())
+//                 .orElseThrow(() -> new RuntimeException("User not found with id " + dto.getCreatedById()));
+
+//         QuestionCode questionCode = null;
+//         if (dto.getQuestionCode() != null) {
+//             questionCode = questionCodeRepository.findByCode(dto.getQuestionCode())
+//                     .orElseThrow(
+//                             () -> new RuntimeException("QuestionCode not found with id " + dto.getQuestionCode()));
+//         }
+
+//         existing.setContent(dto.getContent());
+//         existing.setType(dto.getType());
+//         existing.setCorrectAnswer(dto.getCorrectAnswer());
+//         existing.setCompany(company);
+//         existing.setCreatedBy(createdBy);
+//         existing.setQuestionCode(questionCode);
+
+//         existing.getOptions().clear();
+//         if (dto.getOptions() != null) {
+//             existing.setOptions(
+//                     dto.getOptions().stream()
+//                             .map(optDto -> {
+//                                 var option = optionMapper.toEntity(optDto);
+//                                 option.setQuestion(existing);
+//                                 return option;
+//                             })
+//                             .collect(Collectors.toList()));
+//         }
+
+//         Question updated = questionRepository.save(existing);
+//         return questionMapper.toResponseDto(updated);
+//     }
+
     public QuestionResponseDto updateQuestion(Long id, QuestionRequestDto dto) {
+
         Question existing = questionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Question not found with id " + id));
-
-        Company company = companyRepository.findById(dto.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Company not found with id " + dto.getCompanyId()));
-
-        Users createdBy = userRepository.findById(dto.getCreatedById())
-                .orElseThrow(() -> new RuntimeException("User not found with id " + dto.getCreatedById()));
-
-        QuestionCode questionCode = null;
-        if (dto.getQuestionCode() != null) {
-            questionCode = questionCodeRepository.findByCode(dto.getQuestionCode())
-                    .orElseThrow(
-                            () -> new RuntimeException("QuestionCode not found with id " + dto.getQuestionCode()));
-        }
+            .orElseThrow(() ->
+                    new RuntimeException("Question not found with id " + id));
 
         existing.setContent(dto.getContent());
         existing.setType(dto.getType());
         existing.setCorrectAnswer(dto.getCorrectAnswer());
-        existing.setCompany(company);
-        existing.setCreatedBy(createdBy);
-        existing.setQuestionCode(questionCode);
 
-        // reset options lama
         existing.getOptions().clear();
+
         if (dto.getOptions() != null) {
-            existing.setOptions(
-                    dto.getOptions().stream()
-                            .map(optDto -> {
-                                var option = optionMapper.toEntity(optDto);
-                                option.setQuestion(existing);
-                                return option;
-                            })
-                            .collect(Collectors.toList()));
+                dto.getOptions().forEach(optDto -> {
+                var option = optionMapper.toEntity(optDto);
+                option.setQuestion(existing);
+                existing.getOptions().add(option);
+                });
         }
 
         Question updated = questionRepository.save(existing);
+
         return questionMapper.toResponseDto(updated);
-    }
+   }
 
     public void deleteQuestion(Long id) {
         if (!questionRepository.existsById(id)) {

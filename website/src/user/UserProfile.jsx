@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, Outlet,useNavigate  } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [candidate, setCandidate] = useState(null);
@@ -12,8 +12,8 @@ const UserProfile = () => {
     axios.get(`http://localhost:8080/api/candidates/email/${email}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-    .then((res) => setCandidate(res.data))
-    .catch((err) => console.error(err));
+      .then((res) => setCandidate(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
 
@@ -62,19 +62,17 @@ const UserProfile = () => {
         </div>
 
         <div>
-          <label className="text-gray-400">Status:</label>
+          <label className="text-gray-400">Status : </label>
           <span
-            className={`inline-block px-2 py-1 text-sm rounded ${
-              candidate.status === "aktif"
-                ? "bg-green-600"
-                : "bg-gray-600"
-            }`}
+            className={`ml-1 text-sm font-semibold ${candidate.status === "aktif"
+                ? "text-green-400"
+                : "text-gray-400"
+              }`}
           >
-            {candidate.status}
+            {candidate.status?.charAt(0).toUpperCase() + candidate.status?.slice(1)}
           </span>
         </div>
 
-        {/* Tombol tindakan */}
         <div className="mt-6 flex gap-4">
           <Link
             to="/home/user/profile/edit"
