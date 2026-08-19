@@ -214,18 +214,47 @@ export default function AdminCompany() {
         </div>
       ) : (
         // luu tambahan disini
-        <div className="max-w-lg mx-auto bg-gray-800 rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4 text-center">My Company</h2>
-          <p>
-            <strong>Code:</strong> {company.code}
-          </p>
-          <p>
-            <strong>Name:</strong> {company.name}
-          </p>
-          <p>
-            <strong>Description:</strong> {company.description}
-          </p>
+        <div className="max-w-lg mx-auto bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-xl">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center">
+            <span className="text-xl">🏢</span>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-bold text-white">My Company</h2>
+            <p className="text-sm text-gray-400">Company Information</p>
+          </div>
         </div>
+
+        <div className="space-y-4">
+          <div className="bg-gray-900 rounded-xl p-4">
+            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+              Company Code
+            </p>
+            <p className="text-white font-semibold">
+              {company.code}
+            </p>
+          </div>
+
+          <div className="bg-gray-900 rounded-xl p-4">
+            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+              Company Name
+            </p>
+            <p className="text-white font-semibold">
+              {company.name}
+            </p>
+          </div>
+
+          <div className="bg-gray-900 rounded-xl p-4">
+            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+              Description
+            </p>
+            <p className="text-gray-300 leading-relaxed">
+              {company.description || "No description available"}
+            </p>
+          </div>
+        </div>
+      </div>
       )}
     </div>
   );
