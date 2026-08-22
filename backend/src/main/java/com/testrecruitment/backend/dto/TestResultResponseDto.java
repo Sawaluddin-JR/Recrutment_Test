@@ -15,8 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TestResultResponseDto {
+
     private Long id;
+
     private Long candidateId;
+
+    private CandidateResponseDto candidate; // Update code by sawaluddin
+    
     private String questionCode;
 
     private LocalDateTime startTime;

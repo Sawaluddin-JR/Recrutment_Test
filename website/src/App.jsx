@@ -55,7 +55,7 @@ export default function App() {
         <Route path="schedule" element={<TestScheduleList />} />
         <Route path="schedule/add" element={<TestScheduleForm />} />
         <Route path="notification" element={<AdminNotification />} />
-        <Route path="penilaianjawaban" element={<FormPenilaianJawaban />} />
+        <Route path="penilaianjawaban/:id" element={<FormPenilaianJawaban />} />
         <Route path="hasilseleksi" element={<FormHasilSeleksi />} />
         <Route path="manajementuser" element={<FormManajemenUser />} />
       </Route>

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const FormHasilSeleksi = () => {
+  const navigate = useNavigate();
   const [kandidat, setKandidat] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -141,6 +143,15 @@ const FormHasilSeleksi = () => {
                   </select>
                 </td>
                 <td className="p-2 text-right">
+                  <button
+                    onClick={() =>
+                      navigate(`/home/admin/penilaianjawaban/${k.id}`)
+                    }
+                    className="bg-yellow-600 hover:bg-yellow-700 px-3 py-1 rounded"
+                  >
+                    📝 Nilai
+                  </button>
+
                   <button
                     onClick={() => kirimNotifikasi(k)}
                     className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded"

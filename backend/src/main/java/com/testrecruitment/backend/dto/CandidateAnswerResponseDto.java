@@ -9,11 +9,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+// public class CandidateAnswerResponseDto {
+//     private Long id;
+//     private Long questionId;
+//     private Long selectedOptionId;
+//     private String answerText;
+//     private Boolean isCorrect;
+//     private Double score;
+// }
+
 public class CandidateAnswerResponseDto {
     private Long id;
     private Long questionId;
     private Long selectedOptionId;
+    private String question;
+    private String correctAnswer;
     private String answerText;
     private Boolean isCorrect;
     private Double score;
+    private String evaluationNote;
 }

@@ -34,5 +34,10 @@ public class CandidateAnswer {
     private String answerText; // untuk ESSAY
 
     private Boolean isCorrect; // null untuk ESSAY
+    
     private Double score; // poin dari soal ini
+
+    // Update code by sawaluddin
+    @Column(columnDefinition = "TEXT")
+    private String evaluationNote;
 }

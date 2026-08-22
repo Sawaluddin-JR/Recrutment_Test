@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+// import jakarta.transaction.Transactional;
 
+import com.testrecruitment.backend.dto.EvaluateAnswerItemDto;
+import com.testrecruitment.backend.dto.EvaluateAnswersRequestDto;
 import com.testrecruitment.backend.dto.TestResultRequestDto;
 import com.testrecruitment.backend.dto.TestResultResponseDto;
 import com.testrecruitment.backend.mapper.TestResultMapper;
@@ -15,7 +19,6 @@ import com.testrecruitment.backend.model.TestStatus;
 import com.testrecruitment.backend.repository.CandidateAnswerRepository;
 import com.testrecruitment.backend.repository.TestResultRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -39,6 +42,7 @@ public class TestResultService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public TestResultResponseDto getById(Long id) {
         return testResultRepository.findById(id)
                 .map(testResultMapper::toResponse)
@@ -98,4 +102,54 @@ public class TestResultService {
         return testResultMapper.toResponse(saved);
     }
 
+    // Update code by sawaluddin
+    @Transactional
+    public TestResultResponseDto evaluateAnswers(
+            Long testResultId,
+            EvaluateAnswersRequestDto requestDto) {
+
+        TestResult testResult = testResultRepository
+                .findById(testResultId)
+                .orElse(null);
+
+        if (testResult == null) {
+            return null;
+        }
+
+        for (EvaluateAnswerItemDto item : requestDto.getAnswers()) {
+
+            CandidateAnswer answer = candidateAnswerRepository
+                    .findById(item.getId())
+                    .orElse(null);
+
+            if (answer == null) {
+                continue;
+            }
+
+            // Pastikan answer memang milik TestResult ini
+            if (answer.getTestResult() == null ||
+                    !answer.getTestResult().getId().equals(testResultId)) {
+                continue;
+            }
+
+            answer.setScore(item.getScore());
+            answer.setEvaluationNote(item.getEvaluationNote());
+
+            candidateAnswerRepository.save(answer);
+        }
+
+        // Hitung ulang total score
+        List<CandidateAnswer> answers =
+                candidateAnswerRepository.findByTestResultId(testResultId);
+
+        double totalScore = answers.stream()
+                .mapToDouble(a -> a.getScore() != null ? a.getScore() : 0)
+                .sum();
+
+        testResult.setScore(totalScore);
+
+        testResultRepository.save(testResult);
+
+        return testResultMapper.toResponse(testResult);
+    }
 }

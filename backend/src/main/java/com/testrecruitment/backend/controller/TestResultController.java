@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.testrecruitment.backend.dto.EvaluateAnswersRequestDto;
 import com.testrecruitment.backend.dto.TestResultRequestDto;
 import com.testrecruitment.backend.dto.TestResultResponseDto;
 import com.testrecruitment.backend.service.TestResultService;
@@ -61,4 +62,17 @@ public class TestResultController {
         return ResponseEntity.ok(testResultService.submitTest(id));
     }
 
+    // Update code by sawaluddin
+    @PutMapping("/{id}/answers")
+    public ResponseEntity<TestResultResponseDto> evaluateAnswers(
+            @PathVariable Long id,
+            @RequestBody EvaluateAnswersRequestDto requestDto) {
+
+        TestResultResponseDto result =
+                testResultService.evaluateAnswers(id, requestDto);
+
+        return result != null
+                ? ResponseEntity.ok(result)
+                : ResponseEntity.notFound().build();
+    }
 }
