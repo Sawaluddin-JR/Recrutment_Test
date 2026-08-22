@@ -319,7 +319,10 @@ const FormPenilaianJawaban = () => {
             Tidak ada jawaban kandidat.
           </div>
         ) : (
-          jawabanList.map((j, index) => (
+          // jawabanList.map((j, index) => (
+          jawabanList
+            .filter((j) => j.type !== "MULTIPLE_CHOICE")
+            .map((j, index) => (
             <div
               key={j.id}
               className="bg-gray-700 p-5 rounded-xl shadow space-y-4"

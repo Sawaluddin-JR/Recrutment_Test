@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.testrecruitment.backend.dto.CandidateAnswerRequestDto;
+import com.testrecruitment.backend.dto.CandidateAnswerResponseDto;
 import com.testrecruitment.backend.dto.CandidateResponseDto;
 import com.testrecruitment.backend.dto.TestResultRequestDto;
 import com.testrecruitment.backend.dto.TestResultResponseDto;
@@ -13,6 +14,7 @@ import com.testrecruitment.backend.model.Candidate;
 import com.testrecruitment.backend.model.CandidateAnswer;
 import com.testrecruitment.backend.model.TestResult;
 import com.testrecruitment.backend.repository.CandidateRepository;
+import com.testrecruitment.backend.repository.QuestionRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +24,7 @@ public class TestResultMapper {
 
     private final CandidateAnswerMapper candidateAnswerMapper;
     private final CandidateRepository candidateRepository; // Update code by sawaluddin
+    private final QuestionRepository questionRepository;   // Update code by sawaluddin
 
     public TestResult toEntity(TestResultRequestDto dto) {
         if (dto == null)
@@ -97,12 +100,46 @@ public class TestResultMapper {
                 .correctAnswers(entity.getCorrectAnswers())
                 .score(entity.getScore())
                 .status(entity.getStatus())
+
+                // .answers(entity.getAnswers() != null
+                //         ? entity.getAnswers()
+                //                 .stream()
+                //                 .map(candidateAnswerMapper::toResponse)
+                //                 .collect(Collectors.toList())
+                //         : null)
+
                 .answers(entity.getAnswers() != null
-                        ? entity.getAnswers()
-                                .stream()
-                                .map(candidateAnswerMapper::toResponse)
-                                .collect(Collectors.toList())
-                        : null)
+                    ? entity.getAnswers()
+                            .stream()
+                            .map(answer -> {
+
+                                CandidateAnswerResponseDto dto =
+                                        candidateAnswerMapper.toResponse(answer);
+
+                                if (answer.getQuestionId() != null) {
+
+                                    questionRepository
+                                            .findById(answer.getQuestionId())
+                                            .ifPresent(question -> {
+
+                                                dto.setQuestion(
+                                                        question.getContent()
+                                                );
+
+                                                dto.setType(
+                                                        question.getType().name()
+                                                );
+
+                                                dto.setCorrectAnswer(
+                                                        question.getCorrectAnswer()
+                                                );
+                                            });
+                                }
+
+                                return dto;
+                            })
+                            .collect(Collectors.toList())
+                    : null)
                 .build();
     }
 }

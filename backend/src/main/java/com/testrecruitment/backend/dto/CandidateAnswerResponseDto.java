@@ -23,6 +23,7 @@ public class CandidateAnswerResponseDto {
     private Long questionId;
     private Long selectedOptionId;
     private String question;
+    private String type;
     private String correctAnswer;
     private String answerText;
     private Boolean isCorrect;

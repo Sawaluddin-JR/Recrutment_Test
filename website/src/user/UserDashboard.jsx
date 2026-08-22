@@ -117,7 +117,7 @@ const UserDashboard = () => {
             <div>
               <p className="text-purple-100 text-sm">Skor Terakhir</p>
               <h3 className="text-3xl font-bold text-white mt-2">
-                {latestTest?.score ?? "-"}
+                {latestTest?.score * 10 ?? "-"}
               </h3>
             </div>
 
@@ -307,7 +307,7 @@ const UserDashboard = () => {
 
                   <div className="flex items-end gap-2 mt-1">
                     <span className="text-4xl font-bold text-white">
-                      {latestTest.score ?? "-"}
+                      {latestTest.score * 10 ?? "-"}
                     </span>
 
                     {latestTest.score !== null &&

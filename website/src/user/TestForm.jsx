@@ -11,8 +11,9 @@ const TestForm = () => {
   const [resultDetail, setResultDetail] = useState(null);
 
   // timer
-  const [timeLeft, setTimeLeft] = useState(2 * 60 * 60); // 2 jam (dalam detik)
-  // const [timeLeft, setTimeLeft] = useState(1 * 1 * 60); // 2 jam (dalam detik)
+  // const [timeLeft, setTimeLeft] = useState(2 * 60 * 60); // 2 jam (dalam detik)
+  // const [timeLeft, setTimeLeft] = useState(1 * 1 * 60); // 1 jam (dalam detik)
+  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 menit (dalam detik)
 
   const location = useLocation();
   const questionCode = location.state?.code || "UMUM"; // default ke UMUM kalau null
@@ -66,10 +67,10 @@ const TestForm = () => {
 
   // format waktu ke hh:mm:ss
   const formatTime = (sec) => {
-    const h = String(Math.floor(sec / 3600)).padStart(2, "0");
-    const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
+    const m = String(Math.floor(sec / 60)).padStart(2, "0");
     const s = String(sec % 60).padStart(2, "0");
-    return `${h}:${m}:${s}`;
+
+    return `${m}:${s}`;
   };
 
   // handle jawaban
@@ -112,19 +113,17 @@ const TestForm = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded shadow-md">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">
-          📑 Kerjakan Tes ({questionCode})
-        </h2>
+    <div className="bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-700">
+      <div className="flex justify-end items-center mb-6">
         {!showResult && (
-          <div className="bg-gray-700 px-3 py-1 rounded text-yellow-300 font-mono">
-            ⏳ {formatTime(timeLeft)}
+          <div className="flex items-center gap-2 bg-gray-900/80 border border-yellow-500/30 px-4 py-2 rounded-xl text-yellow-300 font-mono shadow">
+            <span className="text-lg">⏳</span>
+            <span className="font-semibold">{formatTime(timeLeft)}</span>
           </div>
         )}
       </div>
 
-      {showResult ? (
+      {/* {showResult ? (
         <div className="p-6 bg-gray-700 rounded">
           <h3 className="text-xl font-bold mb-4">📊 Hasil Tes</h3>
           <p className="mb-2">Total Soal: {resultDetail?.totalQuestions}</p>
@@ -133,7 +132,171 @@ const TestForm = () => {
           <p className="mb-2">Status: {resultDetail?.status}</p>
         </div>
       ) : questions.length === 0 ? (
-        <p className="text-gray-400">⏳ Soal belum tersedia...</p>
+        <p className="text-gray-400">⏳ Soal belum tersedia...</p> */}
+
+      {showResult ? (
+        /* ================= HASIL TES ================= */
+        <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl p-6 border border-gray-600">
+
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center">
+              <span className="text-4xl">🎉</span>
+            </div>
+
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Tes Selesai!
+            </h3>
+
+            <p className="text-gray-400">
+              Terima kasih sudah menyelesaikan tes. Berikut hasil yang kamu peroleh.
+            </p>
+          </div>
+
+          {/* Score */}
+          <div className="bg-gray-900 rounded-2xl p-6 text-center mb-6 border border-gray-700">
+            <p className="text-gray-400 text-sm mb-2">
+              Nilai Akhir
+            </p>
+
+            <div className="text-5xl font-extrabold text-yellow-400 mb-2">
+              {resultDetail?.score * 10 ?? 0}
+            </div>
+
+            <div className="text-sm text-gray-500">
+              dari 100
+            </div>
+          </div>
+
+          {/* Statistik */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+
+            {/* Total Soal */}
+            <div className="bg-gray-900/70 rounded-xl p-4 border border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                  📝
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-500">
+                    Total Soal
+                  </p>
+
+                  <p className="text-xl font-bold text-white">
+                    {resultDetail?.totalQuestions ?? 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Jawaban Benar */}
+            <div className="bg-gray-900/70 rounded-xl p-4 border border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
+                  ✅
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-500">
+                    Jawaban Benar
+                  </p>
+
+                  <p className="text-xl font-bold text-green-400">
+                    {resultDetail?.correctAnswers ?? 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className="bg-gray-900/70 rounded-xl p-4 border border-gray-700">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                  🏆
+                </div>
+
+                <div>
+                  <p className="text-xs text-gray-500">
+                    Status
+                  </p>
+
+                  <p className="text-lg font-bold text-white">
+                    {resultDetail?.status || "-"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Progress */}
+          <div className="bg-gray-900/70 rounded-xl p-5 border border-gray-700">
+
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-400">
+                Tingkat Ketepatan
+              </span>
+
+              <span className="text-sm font-semibold text-white">
+                {resultDetail?.totalQuestions
+                  ? Math.round(
+                    (resultDetail.correctAnswers /
+                      resultDetail.totalQuestions) *
+                    100
+                  )
+                  : 0}
+                %
+              </span>
+            </div>
+
+            <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+              <div
+                className="bg-green-500 h-3 rounded-full transition-all duration-700"
+                style={{
+                  width: `${resultDetail?.totalQuestions
+                      ? Math.round(
+                        (resultDetail.correctAnswers /
+                          resultDetail.totalQuestions) *
+                        100
+                      )
+                      : 0
+                    }%`,
+                }}
+              />
+            </div>
+
+          </div>
+
+          {/* Footer */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-400">
+              📌 Hasil tes kamu telah berhasil disimpan.
+            </p>
+          </div>
+
+        </div>
+
+      ) : questions.length === 0 ? (
+
+        /* ================= BELUM ADA SOAL ================= */
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+
+          <div className="w-16 h-16 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+            <span className="text-3xl animate-pulse">
+              ⏳
+            </span>
+          </div>
+
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Menyiapkan Soal...
+          </h3>
+
+          <p className="text-gray-400 text-sm max-w-md">
+            Soal sedang dipersiapkan. Mohon tunggu sebentar sebelum memulai tes.
+          </p>
+
+        </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           {questions.map((q, idx) => (

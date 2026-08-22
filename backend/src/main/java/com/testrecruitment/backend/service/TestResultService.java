@@ -17,6 +17,7 @@ import com.testrecruitment.backend.model.CandidateAnswer;
 import com.testrecruitment.backend.model.TestResult;
 import com.testrecruitment.backend.model.TestStatus;
 import com.testrecruitment.backend.repository.CandidateAnswerRepository;
+import com.testrecruitment.backend.repository.QuestionRepository;
 import com.testrecruitment.backend.repository.TestResultRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class TestResultService {
 
     private final TestResultRepository testResultRepository;
     private final CandidateAnswerRepository candidateAnswerRepository;
+    private final QuestionRepository questionRepository;
     private final TestResultMapper testResultMapper;
 
     public TestResultResponseDto create(TestResultRequestDto requestDto) {
@@ -47,6 +49,40 @@ public class TestResultService {
         return testResultRepository.findById(id)
                 .map(testResultMapper::toResponse)
                 .orElse(null);
+    }
+
+    private TestResultResponseDto buildResponse(TestResult testResult) {
+
+        TestResultResponseDto response =
+                testResultMapper.toResponse(testResult);
+
+        if (response.getAnswers() != null) {
+
+            response.getAnswers().forEach(answer -> {
+
+                if (answer.getQuestionId() != null) {
+
+                    questionRepository
+                            .findById(answer.getQuestionId())
+                            .ifPresent(question -> {
+
+                                answer.setType(
+                                        question.getType().name()
+                                );
+
+                                answer.setQuestion(
+                                        question.getContent()
+                                );
+
+                                answer.setCorrectAnswer(
+                                        question.getCorrectAnswer()
+                                );
+                            });
+                }
+            });
+        }
+
+        return response;
     }
 
     public TestResultResponseDto update(Long id, TestResultRequestDto requestDto) {
@@ -85,6 +121,7 @@ public class TestResultService {
         List<CandidateAnswer> answers = candidateAnswerRepository.findByTestResultId(testResultId);
 
         int correctCount = 0;
+
         for (CandidateAnswer ans : answers) {
             if (Boolean.TRUE.equals(ans.getIsCorrect())) {
                 correctCount++;
@@ -94,7 +131,15 @@ public class TestResultService {
         // set hasil ke TestResult
         result.setCorrectAnswers(correctCount);
         result.setTotalQuestions(answers.size());
-        result.setScore((double) correctCount); // bisa disesuaikan
+
+        // 1 jawaban benar = 10 poin
+        double score = correctCount * 10.0;
+
+        // Maksimal nilai 100
+        score = Math.min(score, 100.0);
+
+        result.setScore(score);
+
         result.setStatus(TestStatus.SUBMITTED);
         result.setEndTime(LocalDateTime.now());
 
