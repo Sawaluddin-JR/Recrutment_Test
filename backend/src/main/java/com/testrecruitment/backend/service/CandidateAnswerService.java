@@ -40,7 +40,7 @@ public class CandidateAnswerService {
             // misal ambil dari DB: QuestionOption option = optionRepo.findById(...);
             boolean isCorrect = request.getSelectedOptionId().equals(getCorrectOptionId(request.getQuestionId()));
             answer.setIsCorrect(isCorrect);
-            answer.setScore(isCorrect ? 1.0 : 0.0);
+            answer.setScore(isCorrect ? 10.0 : 0.0);
         } else {
             // untuk essay default dulu 0
             answer.setIsCorrect(null);
