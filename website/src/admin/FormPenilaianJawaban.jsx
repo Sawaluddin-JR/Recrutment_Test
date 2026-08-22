@@ -138,25 +138,38 @@ const FormPenilaianJawaban = () => {
     try {
       setSaving(true);
 
+      const token = localStorage.getItem("token");
+
       const payload = {
         answers: jawabanList.map((answer) => ({
           id: answer.id,
-          score:
-            answer.score === "" ? 0 : Number(answer.score),
+          score: answer.score === "" ? 0 : Number(answer.score),
           evaluationNote: answer.evaluationNote,
         })),
       };
 
+      console.log("PAYLOAD:", payload);
+      console.log("TOKEN:", token);
+
       await axios.put(
         `http://localhost:8080/api/testresult/${id}/answers`,
-        payload
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       alert("✅ Penilaian berhasil disimpan!");
 
-      navigate("/hasil-seleksi");
+      navigate("/home/admin/hasilseleksi");
     } catch (err) {
       console.error("Gagal menyimpan penilaian:", err);
+      console.error("Status:", err.response?.status);
+      console.error("Response:", err.response?.data);
+
       alert("❌ Gagal menyimpan penilaian.");
     } finally {
       setSaving(false);
