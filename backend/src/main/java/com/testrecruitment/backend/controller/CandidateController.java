@@ -31,15 +31,17 @@ public class CandidateController {
         return ResponseEntity.ok(candidate);
     }
 
-    // Add new candidate (Request DTO)
-    @PostMapping
-    public ResponseEntity<CandidateResponseDto> addCandidate(@RequestBody CandidateRequestDto dto) {
-        // Default status jika belum diisi bisa diatur di service atau mapper
-        if (dto.getStatus() == null) {
-            dto.setStatus("Menunggu");
+   @PostMapping
+    public ResponseEntity<CandidateResponseDto> addCandidate(
+            @RequestBody CandidateRequestDto dto) {
+
+        if (dto.getStatus() == null || dto.getStatus().isBlank()) {
+            //dto.setStatus("Menunggu");
+            dto.setStatus("aktif");
         }
+
         CandidateResponseDto created = candidateService.createCandidate(dto);
-        System.out.println("Response Candidate : " + created);
+
         return ResponseEntity.ok(created);
     }
 

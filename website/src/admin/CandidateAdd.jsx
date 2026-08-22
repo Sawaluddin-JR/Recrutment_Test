@@ -20,6 +20,9 @@ const handleSubmit = async (e) => {
     const token = localStorage.getItem("token");
 
     try {
+      console.log("TOKEN:", token);
+      console.log("FORM:", form);
+
       const res = await axios.post("http://localhost:8080/api/candidates", form, {
         headers: {
           "Content-Type": "application/json",
@@ -28,6 +31,7 @@ const handleSubmit = async (e) => {
       });
 
       alert("✅ Kandidat berhasil ditambahkan!");
+
       setForm({
         fullName: "",
         email: "",
@@ -39,8 +43,16 @@ const handleSubmit = async (e) => {
       });
     } catch (error) {
       console.error("Gagal tambah kandidat:", error);
-      // alert("❌ Gagal menambahkan kandidat.");
-      alert("✅ Kandidat berhasil ditambahkan!");
+
+      console.error("Status:", error.response?.status);
+      console.error("Response:", error.response?.data);
+
+      const message =
+        error.response?.data?.message ||
+        error.response?.data ||
+        "Gagal menambahkan kandidat.";
+
+      alert(`❌ ${message} Email belum terdaftar di Users.`);
     }
   };
 
@@ -74,7 +86,7 @@ const handleSubmit = async (e) => {
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
         >
-          Simpan Kandidat
+          Submit
         </button>
       </form>
     </div>
