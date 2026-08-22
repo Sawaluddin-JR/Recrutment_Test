@@ -160,7 +160,7 @@ const TestForm = () => {
             </p>
 
             <div className="text-5xl font-extrabold text-yellow-400 mb-2">
-              {resultDetail?.score * 10 ?? 0}
+              {resultDetail?.score ?? 0}
             </div>
 
             <div className="text-sm text-gray-500">
