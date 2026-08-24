@@ -49,7 +49,7 @@ const QuestionBank = () => {
       options: q.options?.length
         ? q.options.map((opt) => ({
           text: opt.text || "",
-          correct: !!opt.correct,
+          correct: !!opt.isCorrect,
         }))
         : [
           { text: "", correct: false },
@@ -104,7 +104,13 @@ const QuestionBank = () => {
       setQuestions((prev) =>
         prev.map((q) => (q.id === id ? { ...q, ...editedQuestion } : q))
       );
+
+      // Ambil ulang data terbaru dari backend
+      await fetchQuestions();
+
+      // Keluar dari mode edit
       setEditingQuestion(null);
+
     } catch (err) {
       console.error("❌ Gagal simpan edit:", err);
     }
@@ -112,12 +118,23 @@ const QuestionBank = () => {
 
   // Hapus pertanyaan
   const handleDelete = async (id) => {
+    const confirmed = window.confirm(
+      "Apakah Anda yakin ingin menghapus soal ini?"
+    );
+    
+    if (!confirmed) {
+      return;
+    }
+
     const token = localStorage.getItem("token");
+
     try {
       await axios.delete(`http://localhost:8080/api/questions/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setQuestions((prev) => prev.filter((q) => q.id !== id));
+      
     } catch (err) {
       console.error("❌ Gagal hapus soal:", err);
     }
@@ -385,13 +402,13 @@ const QuestionBank = () => {
                             {q.options?.map((opt, optIndex) => (
                               <div
                                 key={opt.id}
-                                className={`flex items-center gap-3 p-3 rounded-lg border transition ${opt.correct
+                                className={`flex items-center gap-3 p-3 rounded-lg border transition ${opt.isCorrect
                                   ? "bg-green-500/10 border-green-500/30"
                                   : "bg-gray-800/50 border-gray-700"
                                   }`}
                               >
                                 <div
-                                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${opt.correct
+                                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${opt.isCorrect
                                     ? "bg-green-500 text-white"
                                     : "bg-gray-700 text-gray-300"
                                     }`}
@@ -401,7 +418,7 @@ const QuestionBank = () => {
 
                                 <span
                                   className={
-                                    opt.correct
+                                    opt.isCorrect
                                       ? "text-green-300 font-semibold"
                                       : "text-gray-300"
                                   }
@@ -409,7 +426,7 @@ const QuestionBank = () => {
                                   {opt.text}
                                 </span>
 
-                                {opt.correct && (
+                                {opt.isCorrect && (
                                   <span className="ml-auto text-xs text-green-400 font-semibold">
                                     ✓ Benar
                                   </span>
