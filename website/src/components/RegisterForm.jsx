@@ -128,7 +128,7 @@ const RegisterForm = ({ title, subtitle, buttonText, darkMode, onBackToLogin }) 
             </button>
           </div>
         </div>
-        <div>
+        {/* <div>
           <label className={`block ${label} text-sm mb-1`}>Role</label>
           <select
             className={`w-full px-4 py-2 rounded-lg ${inputBg} border focus:outline-none focus:ring-2 focus:ring-blue-500`}
@@ -138,9 +138,9 @@ const RegisterForm = ({ title, subtitle, buttonText, darkMode, onBackToLogin }) 
           >
             <option value="USER">User</option>
             <option value="ADMIN">Admin</option>
-            {/* <option value="MODERATOR">Moderator</option> */}
           </select>
-        </div>
+        </div> */}
+        <input type="hidden" value="USER" name="role" />
         <div>
           <label className={`block ${label} text-sm mb-1`}>Kode OTP</label>
           <div className="flex gap-2">
