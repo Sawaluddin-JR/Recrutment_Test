@@ -133,7 +133,7 @@ public class TestResultService {
         result.setTotalQuestions(answers.size());
 
         // 1 jawaban benar = 10 poin
-        double score = correctCount * 10.0;
+        double score = correctCount * 3.0;
 
         // Maksimal nilai 100
         score = Math.min(score, 100.0);

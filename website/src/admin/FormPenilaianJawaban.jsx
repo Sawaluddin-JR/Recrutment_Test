@@ -12,6 +12,12 @@ const FormPenilaianJawaban = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  const bobotSoal = [10, 10, 15, 15, 20];
+
+  const getMaxScore = (index) => {
+    return bobotSoal[index] ?? 0;
+  };
+
   // Contoh data kandidat
   // const user = {
   //   id: 1,
@@ -134,6 +140,29 @@ const FormPenilaianJawaban = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validasi nilai berdasarkan bobot masing-masing soal
+    const soalDinilai = jawabanList.filter(
+      (j) => j.type !== "MULTIPLE_CHOICE"
+    );
+
+    for (let index = 0; index < soalDinilai.length; index++) {
+      const answer = soalDinilai[index];
+      const maxScore = getMaxScore(index);
+      const score = Number(answer.score);
+
+      if (answer.score === "" || answer.score === null) {
+        alert(`Nilai Soal ${index + 1} wajib diisi.`);
+        return;
+      }
+
+      if (isNaN(score) || score < 0 || score > maxScore) {
+        alert(
+          `Nilai Soal ${index + 1} harus antara 0 sampai ${maxScore}.`
+        );
+        return;
+      }
+    }
 
     try {
       setSaving(true);
@@ -323,92 +352,97 @@ const FormPenilaianJawaban = () => {
           jawabanList
             .filter((j) => j.type !== "MULTIPLE_CHOICE")
             .map((j, index) => (
-            <div
-              key={j.id}
-              className="bg-gray-700 p-5 rounded-xl shadow space-y-4"
-            >
+              <div
+                key={j.id}
+                className="bg-gray-700 p-5 rounded-xl shadow space-y-4"
+              >
 
-              {/* Nomor + Soal */}
-              <div>
-                <p className="font-bold text-lg mb-2">
-                  Soal {index + 1}
-                </p>
+                {/* Nomor + Soal */}
+                <div>
+                  <p className="font-bold text-lg mb-2">
+                    Soal {index + 1}
+                  </p>
 
-                <p className="text-gray-200">
-                  {j.question || "Soal tidak ditemukan"}
-                </p>
+                  <p className="text-gray-200">
+                    {j.question || "Soal tidak ditemukan"}
+                  </p>
+                </div>
+
+                {/* Jawaban Benar */}
+                <div className="bg-green-900 p-3 rounded-lg">
+                  <p className="font-semibold text-green-300 mb-1">
+                    Jawaban Benar
+                  </p>
+
+                  <p>
+                    {j.correctAnswer || "Tidak tersedia"}
+                  </p>
+                </div>
+
+                {/* Jawaban Kandidat */}
+                <div className="bg-gray-600 p-3 rounded-lg">
+                  <p className="font-semibold text-blue-300 mb-1">
+                    Jawaban Kandidat
+                  </p>
+
+                  <p>
+                    {j.answerText || "Tidak ada jawaban"}
+                  </p>
+                </div>
+
+                {/* Nilai */}
+                <div>
+                  <label className="block mb-1 font-semibold">
+                    Nilai
+                  </label>
+
+                  <input
+                    type="number"
+                    min="0"
+                    max={getMaxScore(index)}
+                    step="0.01"
+                    value={j.score}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const maxScore = getMaxScore(index);
+
+                      if (value === "" || Number(value) <= maxScore) {
+                        handleChange(j.id, "score", value);
+                      }
+                    }}
+                    className="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500"
+                    placeholder={`0 - ${getMaxScore(index)}`}
+                    required
+                  />
+
+                  <p className="text-sm text-gray-400 mt-1">
+                    Maksimal nilai: <span className="font-semibold">{getMaxScore(index)}</span>
+                  </p>
+                </div>
+
+                {/* Catatan */}
+                <div>
+                  <label className="block mb-1 font-semibold">
+                    Catatan
+                  </label>
+
+                  <textarea
+                    value={j.evaluationNote}
+                    onChange={(e) =>
+                      handleChange(
+                        j.id,
+                        "evaluationNote",
+                        e.target.value
+                      )
+                    }
+                    className="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500"
+                    placeholder="Masukkan catatan penilaian..."
+                    rows="3"
+                  />
+                </div>
+
               </div>
-
-              {/* Jawaban Benar */}
-              <div className="bg-green-900 p-3 rounded-lg">
-                <p className="font-semibold text-green-300 mb-1">
-                  Jawaban Benar
-                </p>
-
-                <p>
-                  {j.correctAnswer || "Tidak tersedia"}
-                </p>
-              </div>
-
-              {/* Jawaban Kandidat */}
-              <div className="bg-gray-600 p-3 rounded-lg">
-                <p className="font-semibold text-blue-300 mb-1">
-                  Jawaban Kandidat
-                </p>
-
-                <p>
-                  {j.answerText || "Tidak ada jawaban"}
-                </p>
-              </div>
-
-              {/* Nilai */}
-              <div>
-                <label className="block mb-1 font-semibold">
-                  Nilai
-                </label>
-
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  step="0.01"
-                  value={j.score}
-                  onChange={(e) =>
-                    handleChange(
-                      j.id,
-                      "score",
-                      e.target.value
-                    )
-                  }
-                  className="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500"
-                  placeholder="0 - 100"
-                  required
-                />
-              </div>
-
-              {/* Catatan */}
-              <div>
-                <label className="block mb-1 font-semibold">
-                  Catatan
-                </label>
-
-                <textarea
-                  value={j.evaluationNote}
-                  onChange={(e) =>
-                    handleChange(
-                      j.id,
-                      "evaluationNote",
-                      e.target.value
-                    )
-                  }
-                  className="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500"
-                  placeholder="Masukkan catatan penilaian..."
-                  rows="3"
-                />
-              </div>
-
-            </div>
-          ))
+            ))
         )}
 
         {/* Tombol */}

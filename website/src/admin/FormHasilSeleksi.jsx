@@ -295,7 +295,8 @@ const FormHasilSeleksi = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-sm shadow-md">
                           {/* {k.nama?.charAt(0)?.toUpperCase() || "?"} */}
-                          {k.nama?.split(" ").map(n => n.charAt(0)).slice(0, 2).join("").toUpperCase() || "?"}
+                          {k.candidateId}
+                          {/* {k.nama?.split(" ").map(n => n.charAt(0)).slice(0, 2).join("").toUpperCase() || "?"} */}
                         </div>
 
                         <div>
