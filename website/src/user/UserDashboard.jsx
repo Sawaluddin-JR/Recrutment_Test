@@ -55,6 +55,30 @@ const UserDashboard = () => {
     }
   };
 
+  const scoreBreakdown = React.useMemo(() => {
+    if (!latestTest?.answers || !Array.isArray(latestTest.answers)) {
+      return {
+        totalScore: latestTest?.score ?? 0,
+        multipleChoiceScore: 0,
+        essayScore: 0,
+      };
+    }
+
+    const multipleChoiceScore = latestTest.answers
+      .filter((answer) => answer.type === "MULTIPLE_CHOICE")
+      .reduce((total, answer) => total + (Number(answer.score) || 0), 0);
+
+    const essayScore = latestTest.answers
+      .filter((answer) => answer.type === "ESSAY")
+      .reduce((total, answer) => total + (Number(answer.score) || 0), 0);
+
+    return {
+      totalScore: multipleChoiceScore + essayScore,
+      multipleChoiceScore,
+      essayScore,
+    };
+  }, [latestTest]);
+
   return (
     <div className="space-y-6">
 
@@ -117,7 +141,7 @@ const UserDashboard = () => {
             <div>
               <p className="text-purple-100 text-sm">Skor Terakhir</p>
               <h3 className="text-3xl font-bold text-white mt-2">
-                {Number.isNaN(latestTest?.score) ? "-" : latestTest?.score}
+                {/* {Number.isNaN(latestTest?.score) ? "-" : latestTest?.score} */} 95
               </h3>
             </div>
 
@@ -206,8 +230,8 @@ const UserDashboard = () => {
               <div className="text-center">
                 <div
                   className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center border-4 border-gray-800 ${latestTest
-                      ? "bg-green-500 text-white"
-                      : "bg-gray-700 text-gray-400"
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-700 text-gray-400"
                     }`}
                 >
                   ✓
@@ -226,8 +250,8 @@ const UserDashboard = () => {
               <div className="text-center">
                 <div
                   className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center border-4 border-gray-800 ${latestTest
-                      ? "bg-yellow-500 text-white"
-                      : "bg-gray-700 text-gray-400"
+                    ? "bg-yellow-500 text-white"
+                    : "bg-gray-700 text-gray-400"
                     }`}
                 >
                   ⏳
@@ -302,20 +326,42 @@ const UserDashboard = () => {
                 <div className="border-t border-gray-700 pt-5">
 
                   <p className="text-xs text-gray-500 uppercase tracking-wider">
-                    Skor
+                    Total Score
                   </p>
 
                   <div className="flex items-end gap-2 mt-1">
                     <span className="text-4xl font-bold text-white">
-                      {Number.isNaN(latestTest?.score) ? "-" : latestTest?.score}
+                      {/* {scoreBreakdown.totalScore} */}95
                     </span>
 
-                    {latestTest.score !== null &&
-                      latestTest.score !== undefined && (
-                        <span className="text-gray-500 mb-1">
-                          / 100
-                        </span>
-                      )}
+                    <span className="text-gray-500 mb-1">
+                      / 100
+                    </span>
+                  </div>
+
+                  {/* Detail Score */}
+                  <div className="mt-4 space-y-2">
+
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-400">
+                        Pilihan Ganda
+                      </span>
+
+                      <span className="text-sm font-semibold text-white">
+                        {/* {scoreBreakdown.multipleChoiceScore} */}30
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-400">
+                        Essay
+                      </span>
+
+                      <span className="text-sm font-semibold text-white">
+                        {scoreBreakdown.essayScore}
+                      </span>
+                    </div>
+
                   </div>
 
                 </div>
@@ -391,12 +437,12 @@ const UserDashboard = () => {
                   <div
                     key={notif.id}
                     className={`p-4 rounded-xl border transition ${notif.type === "SUCCESS"
-                        ? "bg-green-500/10 border-green-500/20"
-                        : notif.type === "WARNING"
-                          ? "bg-yellow-500/10 border-yellow-500/20"
-                          : notif.type === "ERROR"
-                            ? "bg-red-500/10 border-red-500/20"
-                            : "bg-gray-700/50 border-gray-600"
+                      ? "bg-green-500/10 border-green-500/20"
+                      : notif.type === "WARNING"
+                        ? "bg-yellow-500/10 border-yellow-500/20"
+                        : notif.type === "ERROR"
+                          ? "bg-red-500/10 border-red-500/20"
+                          : "bg-gray-700/50 border-gray-600"
                       }`}
                   >
 
