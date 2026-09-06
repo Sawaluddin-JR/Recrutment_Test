@@ -31,6 +31,62 @@ const UserTakeTest = () => {
     }
   };
 
+  const handleStartTest = () => {
+    if (!testInfo?.length) return;
+
+    const test = testInfo[0];
+    const now = new Date();
+
+    const startTime = test.startTime ? new Date(test.startTime) : null;
+    const endTime = test.endTime ? new Date(test.endTime) : null;
+
+    // Tes belum dimulai
+    if (startTime && now < startTime) {
+      alert(
+        `⏳ Tes belum dimulai.\n\nTes dapat diikuti mulai:\n${startTime.toLocaleString(
+          "id-ID"
+        )}`
+      );
+      return;
+    }
+
+    if (endTime && now > endTime) {
+      alert(
+        "⏳ Waktu tes sudah berakhir.\nKamu tidak bisa mengikuti tes ini."
+      );
+
+      return;
+    }
+
+    // Validasi kode soal 
+    if (!test.questionCode) {
+      alert("❌ Kode soal tes tidak tersedia.");
+      return;
+    }
+
+    navigate("/home/user/test", {
+      state: {
+        code: test.questionCode,
+      },
+    });
+
+  };
+
+  const test = testInfo?.[0];
+
+  const startTime = test?.startTime
+    ? new Date(test.startTime)
+    : null;
+
+  const endTime = test?.endTime
+    ? new Date(test.endTime)
+    : null;
+
+  const now = new Date();
+
+  const isNotStarted = startTime && now < startTime;
+  const isExpired = endTime && now > endTime;
+
   return (
     <div className="bg-gray-800 p-6 rounded shadow-md">
       <div className="mb-6">
@@ -118,9 +174,15 @@ const UserTakeTest = () => {
 
           {(() => {
             const now = new Date();
+
+            const startTime = testInfo[0]?.startTime
+              ? new Date(testInfo[0].startTime)
+              : null;
+
             const endTime = testInfo[0]?.endTime
               ? new Date(testInfo[0].endTime)
               : null;
+
             const isExpired = endTime && now > endTime;
 
             return (
@@ -130,12 +192,26 @@ const UserTakeTest = () => {
                     : "bg-green-600 hover:bg-green-700"
                   }`}
                 onClick={() => {
-                  if (isExpired) {
-                    alert("⏳ Waktu tes sudah berakhir. Kamu tidak bisa mengikuti tes ini.");
+                  if (startTime && now < startTime) {
+                    alert(
+                      `⏳ Tes belum dimulai.\n\nTes baru dapat diikuti pada:\n${startTime.toLocaleString(
+                        "id-ID"
+                      )}`
+                    );
                     return;
                   }
+
+                  if (isExpired) {
+                    alert(
+                      "⏳ Waktu tes sudah berakhir. Kamu tidak bisa mengikuti tes ini."
+                    );
+                    return;
+                  }
+
                   navigate("/home/user/test", {
-                    state: { code: testInfo[0]?.questionCode },
+                    state: {
+                      code: testInfo[0]?.questionCode,
+                    },
                   });
                 }}
                 disabled={!testInfo[0]?.questionCode || isExpired}
